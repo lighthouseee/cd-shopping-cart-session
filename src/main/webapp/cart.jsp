@@ -8,7 +8,6 @@
 
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title>Your Cart</title>
@@ -23,26 +22,22 @@
 
 <div class="buttons">
 
-    <form action="${pageContext.request.contextPath}/"
+    <form action="${pageContext.request.contextPath}/home"
           method="get">
-
         <input type="submit"
                value="Continue Shopping">
-
     </form>
 
-    <form action="${pageContext.request.contextPath}/checkout.jsp"
+    <form action="${pageContext.request.contextPath}/checkout"
           method="get">
-
         <input type="submit"
                value="Checkout">
-
     </form>
 
 </div>
 
 <%
-    if (cart == null || cart.getItems().isEmpty()) {
+    if (cart == null || cart.isEmpty()) {
 %>
 
 <p>Your cart is empty.</p>
@@ -68,14 +63,9 @@
     <tr>
 
         <td>
-
             <form class="update-form"
-                  action="${pageContext.request.contextPath}/cart"
+                  action="${pageContext.request.contextPath}/update"
                   method="post">
-
-                <input type="hidden"
-                       name="action"
-                       value="update">
 
                 <input type="hidden"
                        name="productCode"
@@ -89,9 +79,7 @@
 
                 <input type="submit"
                        value="Update">
-
             </form>
-
         </td>
 
         <td>
@@ -107,13 +95,8 @@
         </td>
 
         <td>
-
-            <form action="${pageContext.request.contextPath}/cart"
+            <form action="${pageContext.request.contextPath}/remove"
                   method="post">
-
-                <input type="hidden"
-                       name="action"
-                       value="remove">
 
                 <input type="hidden"
                        name="productCode"
@@ -121,9 +104,7 @@
 
                 <input type="submit"
                        value="Remove">
-
             </form>
-
         </td>
 
     </tr>
@@ -139,5 +120,4 @@
 %>
 
 </body>
-
 </html>

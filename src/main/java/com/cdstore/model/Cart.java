@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Cart implements Serializable {
 
-    private List<CartItem> items;
+    private final List<CartItem> items;
 
     public Cart() {
         items = new ArrayList<>();
@@ -17,9 +17,7 @@ public class Cart implements Serializable {
     }
 
     public void addItem(Product product) {
-
         for (CartItem item : items) {
-
             if (item.getProduct().getCode().equals(product.getCode())) {
                 item.setQuantity(item.getQuantity() + 1);
                 return;
@@ -30,36 +28,25 @@ public class Cart implements Serializable {
     }
 
     public void updateItem(String productCode, int quantity) {
-
-        CartItem foundItem = null;
-
         for (CartItem item : items) {
-
             if (item.getProduct().getCode().equals(productCode)) {
-                foundItem = item;
-                break;
-            }
-        }
-
-        if (foundItem != null) {
-
-            if (quantity > 0) {
-                foundItem.setQuantity(quantity);
-            } else {
-                items.remove(foundItem);
+                if (quantity > 0) {
+                    item.setQuantity(quantity);
+                } else {
+                    removeItem(productCode);
+                }
+                return;
             }
         }
     }
 
     public void removeItem(String productCode) {
-
         items.removeIf(
             item -> item.getProduct().getCode().equals(productCode)
         );
     }
 
     public double getTotal() {
-
         double total = 0;
 
         for (CartItem item : items) {
@@ -67,5 +54,9 @@ public class Cart implements Serializable {
         }
 
         return total;
+    }
+
+    public boolean isEmpty() {
+        return items.isEmpty();
     }
 }

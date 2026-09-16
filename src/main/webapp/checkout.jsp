@@ -8,7 +8,6 @@
 
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title>Checkout</title>
@@ -22,10 +21,16 @@
 <h1>CheckOut</h1>
 
 <%
-    if (cart == null || cart.getItems().isEmpty()) {
+    if (cart == null || cart.isEmpty()) {
 %>
 
 <p>Your cart is empty.</p>
+
+<form action="${pageContext.request.contextPath}/home"
+      method="get">
+    <input type="submit"
+           value="Continue Shopping">
+</form>
 
 <%
     } else {
@@ -45,7 +50,6 @@
     %>
 
     <tr>
-
         <td>
             <%= item.getProduct().getDescription() %>
         </td>
@@ -61,7 +65,6 @@
         <td>
             <%= String.format("%.2f", item.getAmount()) %>
         </td>
-
     </tr>
 
     <%
@@ -75,10 +78,15 @@
     <%= String.format("%.2f", cart.getTotal()) %>
 </h3>
 
+<form action="${pageContext.request.contextPath}/home"
+      method="get">
+    <input type="submit"
+           value="Continue Shopping">
+</form>
+
 <%
     }
 %>
 
 </body>
-
 </html>

@@ -1,34 +1,37 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
-    margin: 28px;
+    margin: 25px;
     font-size: 14px;
 }
 
 h1 {
     color: teal;
     font-size: 28px;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
 table {
     border-collapse: collapse;
-    width: 900px;
+    width: 820px;
     max-width: 100%;
+    margin-top: 8px;
 }
 
 th,
 td {
-    border: 1px solid #aaa;
-    padding: 8px;
+    border: 1px solid #b5b5b5;
+    padding: 7px 8px;
     text-align: left;
+    vertical-align: middle;
 }
 
 th {
-    background-color: #eee;
+    background-color: #eeeeee;
+    font-weight: bold;
 }
 
-th:first-child {
-    width: 60%;
+form {
+    margin: 0;
 }
 
 input[type="submit"] {
@@ -43,14 +46,16 @@ input[type="submit"] {
 
 .buttons {
     display: flex;
-    gap: 14px;
+    gap: 12px;
+    margin-bottom: 0;
 }
 
 .update-form {
     display: flex;
+    align-items: center;
     gap: 5px;
 }
 
 h3 {
-    margin-top: 14px;
+    margin-top: 12px;
 }

@@ -1,5 +1,6 @@
 package com.cdstore.servlet;
 
+import com.cdstore.data.ProductDB;
 import com.cdstore.model.Cart;
 import com.cdstore.model.Product;
 
@@ -11,45 +12,47 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
-@WebServlet("/cart")
+@WebServlet({
+    "/home",
+    "/add",
+    "/update",
+    "/remove",
+    "/checkout"
+})
 public class CartServlet extends HttpServlet {
 
-    private Map<String, Product> products;
-
     @Override
-    public void init() {
+    protected void doGet(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
 
-        products = new HashMap<>();
+        String path = request.getServletPath();
 
-        products.put(
-            "8601",
-            new Product(
-                "8601",
-                "86 (the band) - True Life Songs and Pictures",
-                14.95
-            )
-        );
+        switch (path) {
 
-        products.put(
-            "pf01",
-            new Product(
-                "pf01",
-                "Paddlefoot - The first CD",
-                12.95
-            )
-        );
+            case "/home":
+                request.getRequestDispatcher("/home.jsp")
+                       .forward(request, response);
+                break;
 
-        products.put(
-            "pf02",
-            new Product(
-                "pf02",
-                "Paddlefoot - The second CD",
-                14.95
-            )
-        );
+            case "/update":
+                request.getRequestDispatcher("/cart.jsp")
+                       .forward(request, response);
+                break;
+
+            case "/checkout":
+                request.getRequestDispatcher("/checkout.jsp")
+                       .forward(request, response);
+                break;
+
+            default:
+                response.sendRedirect(
+                    request.getContextPath() + "/home"
+                );
+                break;
+        }
     }
 
     @Override
@@ -58,8 +61,33 @@ public class CartServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
-        String action = request.getParameter("action");
-        String productCode = request.getParameter("productCode");
+        request.setCharacterEncoding("UTF-8");
+
+        String path = request.getServletPath();
+
+        switch (path) {
+
+            case "/add":
+                addProduct(request, response);
+                break;
+
+            case "/update":
+                updateProduct(request, response);
+                break;
+
+            case "/remove":
+                removeProduct(request, response);
+                break;
+
+            default:
+                response.sendRedirect(
+                    request.getContextPath() + "/home"
+                );
+                break;
+        }
+    }
+
+    private Cart getCart(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
@@ -70,36 +98,75 @@ public class CartServlet extends HttpServlet {
             session.setAttribute("cart", cart);
         }
 
-        if ("add".equals(action)) {
+        return cart;
+    }
 
-            Product product = products.get(productCode);
+    private void addProduct(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws IOException {
 
-            if (product != null) {
-                cart.addItem(product);
-            }
-        }
+        String productCode =
+            request.getParameter("productCode");
 
-        else if ("update".equals(action)) {
+        Product product =
+            ProductDB.getProduct(productCode);
 
-            try {
-
-                int quantity =
-                    Integer.parseInt(request.getParameter("quantity"));
-
-                cart.updateItem(productCode, quantity);
-
-            } catch (NumberFormatException e) {
-                // Nếu quantity không hợp lệ thì giữ nguyên giỏ hàng.
-            }
-        }
-
-        else if ("remove".equals(action)) {
-
-            cart.removeItem(productCode);
+        if (product != null) {
+            Cart cart = getCart(request);
+            cart.addItem(product);
         }
 
         response.sendRedirect(
-            request.getContextPath() + "/cart.jsp"
+            request.getContextPath() + "/update"
+        );
+    }
+
+    private void updateProduct(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws IOException {
+
+        String productCode =
+            request.getParameter("productCode");
+
+        String quantityText =
+            request.getParameter("quantity");
+
+        Cart cart = getCart(request);
+
+        try {
+            int quantity =
+                Integer.parseInt(quantityText);
+
+            cart.updateItem(
+                productCode,
+                quantity
+            );
+
+        } catch (NumberFormatException e) {
+            // Nếu quantity không hợp lệ thì giữ nguyên giỏ hàng.
+        }
+
+        response.sendRedirect(
+            request.getContextPath() + "/update"
+        );
+    }
+
+    private void removeProduct(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws IOException {
+
+        String productCode =
+            request.getParameter("productCode");
+
+        Cart cart = getCart(request);
+
+        cart.removeItem(productCode);
+
+        response.sendRedirect(
+            request.getContextPath() + "/update"
         );
     }
 }

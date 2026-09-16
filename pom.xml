@@ -10,6 +10,7 @@
     <groupId>com.cdstore</groupId>
     <artifactId>cd-shopping-cart-session</artifactId>
     <version>1.0</version>
+
     <packaging>war</packaging>
 
     <properties>
@@ -30,6 +31,7 @@
     </dependencies>
 
     <build>
+
         <finalName>ROOT</finalName>
 
         <plugins>
